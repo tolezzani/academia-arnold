@@ -1,0 +1,60 @@
+body {
+  font: normal 15pt 'Open Sans', sans-serif;
+  background: linear-gradient(
+    180deg,
+    rgb(255, 255, 255) 60%,
+    rgba(247, 191, 10, 0.38) 90%
+  );
+  min-height: 100vh;
+}
+
+h1 {
+  font-family: 'Young Serif', serif;
+}
+
+span {
+  color: rgba(247, 191, 10);
+}
+
+header {
+  color: black;
+  text-align: center;
+}
+
+section {
+  background-color: white;
+  border-radius: 10px;
+  padding: 15px;
+  width: 500px;
+  margin: 15px auto;
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.315);
+}
+
+footer {
+  color: black;
+  text-align: center;
+  font-style: italic;
+}
+
+footer h3 {
+  font-family: 'Young Serif', serif;
+}
+
+button a {
+  text-decoration: none;
+  color: black;
+}
+
+#inicio {
+  justify-content: space-around;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: black;
+  opacity: 0.6;
+}
+
+#inicio:hover {
+  opacity: 1;
+  font-weight: bold;
+}
