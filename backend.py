@@ -20,6 +20,11 @@ def cadprof():
     return render_template("cadprof.html")
 
 
+@app.route("/cadtreino")
+def cadtreino():
+    return render_template("cadtreino.html")
+
+
 @app.route("/selecionar")
 def selecionar():
     linhas = select_data("Select * from cadastro_aluno")
@@ -29,6 +34,12 @@ def selecionar():
 @app.route("/selecionar_prof")
 def selecionarprof():
     linhas = select_data("Select * from cadastro_prof")
+    return linhas
+
+
+@app.route("/selecionar_treino")
+def selecionartreino():
+    linhas = select_data("Select * from cadastro_treino")
     return linhas
 
 
@@ -57,6 +68,17 @@ def cadastroprof():
         '{proftreino}')""")
     message = "Cadastro realizado com sucesso!"
     return render_template('cadprof.html', message=message)
+
+
+@app.route("/cadastrotreino", methods=['POST', 'GET'])
+def cadastrotreino():
+    treino = request.form['tipotreino']
+    dia_semana = request.form['dias_semana']
+    horario = request.form['horario']
+    insert_data(f"""insert into cadastro_treino (treino, dia_semana, horario)
+        VALUES ('{treino}', '{dia_semana}', '{horario}')""")
+    message = "Cadastro realizado com sucesso!"
+    return render_template('cadtreino.html', message=message)
 
 
 def select_data(query):
