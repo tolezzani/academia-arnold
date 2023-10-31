@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com%22%3E/
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&family=Young+Serif&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="shortcut icon"
+      href="static/images/silhueta-arnold.svg"
+      type="image"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/cadastro.css')}}"
+    />
+    <title>Cadastro Treino</title>
+  </head>
+  <body>
+    <header>
+      <h1>Ficha de Cadastro de <span>Treino</span></h1>
+    </header>
+    <section>
+      <div>
+        <form action="/cadastrotreino" method="POST">
+          Treino Especializado:
+          <select name="tipotreino" id="tipotreino">
+            <option value="musculacao">Musculação</option>
+            <option value="natacao">Natação</option>
+            <option value="ioga">Ioga</option>
+            <option value="crossfit">Crossfit</option>
+          </select> <br/> <br/>
+          Dias da Semana:
+          <select name="dias_semana" id="dias_semana">
+            <option value="seg_qua_sex">Segunda, Quarta e Sexta</option>
+            <option value="ter_qui_sab">Terça, Quinta e Sábado</option>
+          </select> <br/> <br/>
+          Horário:
+          <select name="horario" id="horario">
+            <option value="manha">Manhã</option>
+            <option value="tarde">Tarde</option>
+            <option value="noite">Noite</option>
+          </select>
+          </p>
+          <p>
+            <input type="submit" value="Cadastrar" />
+            <button>
+              <a target="_blank" href="/selecionar_treino">Selecionar</a>
+            </button>
+          </p>
+        </form>
+      </div>
+      <div class="container">
+        <div class="alerta">{{ message }}</div>
+      </div>
+    </section>
+    <a id="inicio" href="/">Voltar à página inicial</a>
+    <footer>
+      <h3>&copy; ARNOLD</h3>
+    </footer>
+  </body>
+</html>
