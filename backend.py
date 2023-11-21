@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 
 app = Flask(__name__)
 
-
+#toto
 @app.route("/")
 def home():
     return render_template("home.html")
