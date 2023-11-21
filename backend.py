@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify, url_for
 from sqlalchemy import create_engine
 
 
@@ -25,22 +25,39 @@ def cadtreino():
     return render_template("cadtreino.html")
 
 
+@app.route("/cadmatri")
+def cadmatri():
+    alunos = select_data("Select nome from cadastro_aluno")
+    alunos = [aluno[0] for aluno in alunos]
+    resultado_cadastro_treino = select_data(
+        "Select treino from cadastro_treino")
+    treinos = [treino[0] for treino in resultado_cadastro_treino]
+    # horarios = [treino[1] for treino in resultado_cadastro_treino]
+    return render_template("cadmatri.html", name=alunos, treinos=treinos)
+
+
 @app.route("/selecionar")
 def selecionar():
     linhas = select_data("Select * from cadastro_aluno")
-    return linhas
+    return jsonify({'result': [dict(linha) for linha in linhas]})
 
 
 @app.route("/selecionar_prof")
 def selecionarprof():
     linhas = select_data("Select * from cadastro_prof")
-    return linhas
+    return jsonify({'result': [dict(linha) for linha in linhas]})
 
 
 @app.route("/selecionar_treino")
 def selecionartreino():
     linhas = select_data("Select * from cadastro_treino")
-    return linhas
+    return jsonify({'result': [dict(linha) for linha in linhas]})
+
+
+@app.route("/selecionar_marque")
+def selecionarmarque():
+    linhas = select_data("Select * from marque_treino")
+    return jsonify({'result': [dict(linha) for linha in linhas]})
 
 
 @app.route("/cadastrar", methods=['POST', 'GET'])
@@ -81,12 +98,56 @@ def cadastrotreino():
     return render_template('cadtreino.html', message=message)
 
 
+@app.route("/cadastromatri", methods=['POST', 'GET'])
+def cadastromatri():
+    matricula = request.form['matricula']
+    treino = request.form['treino']
+    profmus = select_data(
+        "Select nome from cadastro_prof where treino = 'musculacao'")
+    profnat = select_data(
+        "Select nome from cadastro_prof where treino = 'natacao'")
+    profioga = select_data(
+        "Select nome from cadastro_prof where treino = 'ioga'")
+    profcross = select_data(
+        "Select nome from cadastro_prof where treino = 'crossfit'")
+    if treino == "musculacao":
+        periodo = select_data(
+            "Select horario from cadastro_treino where treino = 'musculacao'")
+        message = (
+            f"{matricula} se matriculou em Musculação com o professor {profmus} nos dias segunda, quarta e sexta no período da {periodo}")
+        insert_data(f"""insert into marque_treino (matricula, treino, professor)
+        VALUES ("{matricula}", "{treino}", "{profmus}")""")
+    elif treino == "natacao":
+        periodo = select_data(
+            "Select horario from cadastro_treino where treino = 'natacao'")
+        message = (
+            f"{matricula} se matriculou em Natação com o professor {profnat} nos dias terça, quinta e sábado no período {periodo}")
+        insert_data(f"""insert into marque_treino (matricula, treino, professor)
+        VALUES ('{matricula}', '{treino}', '{profnat}')""")
+    elif treino == "ioga":
+        periodo = select_data(
+            "Select horario from cadastro_treino where treino = 'ioga'")
+        message = (
+            f"{matricula} se matriculou em Ioga com o professor {profioga} nos dias segunda, quarta e sexta no periodo da {periodo}")
+        insert_data(f"""insert into marque_treino (matricula, treino, professor)
+        VALUES ('{matricula}', '{treino}', '{profioga}')""")
+    else:
+        periodo = select_data(
+            "Select horario from cadastro_treino where treino = 'crossfit'")
+        message = (
+            f"{matricula} se matriculou em Crossfit com o professor {profcross} nos dias terça, quinta e sábado no periodo da {periodo}")
+        insert_data(f"""insert into marque_treino (matricula, treino, professor)
+        VALUES ('{matricula}', '{treino}', '{profcross}')""")
+    return render_template('cadmatri.html', message=message)
+
+
 def select_data(query):
     connection = create_connection()
     result = connection.execute(query)
-    resultado_final = ""
+    resultado_final = []
     for row in result:
-        resultado_final = resultado_final + "<br>" + str(row)
+        resultado_final.append(row)
+        # resultado_final = resultado_final + "<br>" + str(row)
     return resultado_final
 
 

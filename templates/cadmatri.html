@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com%22%3E/
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&family=Young+Serif&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="shortcut icon"
+      href="static/images/silhueta-arnold.svg"
+      type="image"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/cadastro.css')}}"
+    />
+    <title>Cadastro Treino</title>
+  </head>
+  <body>
+    <header>
+      <h1>Marque seu <span>Treino</span></h1>
+    </header>
+    <section>
+      <div>
+        <form action= "{{ url_for('cadastromatri') }}" method="POST">
+          Escolha sua matrícula:
+          <select name="matricula" id="matricula">
+            {% for n in name %}
+            <option value="{{n}}">{{ n }}</option>
+            {% endfor %}
+          </select>
+          <br />
+          <br />
+          Selecione o seu treino:
+          <select name="treino" id="treino">
+            {% for t in treinos %}
+            <option value="{{t}}">{{ t }}</option>
+            {% endfor %}
+          </select>
+          <br />
+          <p>
+            <input type="submit" value="Cadastrar" />
+            <button>
+              <a target="_blank" href="/selecionar_marque">Selecionar</a>
+            </button>
+          </p>
+        </form>
+      </div>
+      <div class="container">
+        <div class="alerta">{{ message }}</div>
+      </div>
+    </section>
+    <a id="inicio" href="/">Voltar à página inicial</a>
+    <footer>
+      <h3>&copy; ARNOLD</h3>
+    </footer>
+  </body>
+</html>
