@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 
 app = Flask(__name__)
 
-#toto
+
 @app.route("/")
 def home():
     return render_template("home.html")
@@ -100,44 +100,66 @@ def cadastrotreino():
 
 @app.route("/cadastromatri", methods=['POST', 'GET'])
 def cadastromatri():
+    professor = ""
+    horario = ""
     matricula = request.form['matricula']
     treino = request.form['treino']
     profmus = select_data(
         "Select nome from cadastro_prof where treino = 'musculacao'")
+
     profnat = select_data(
         "Select nome from cadastro_prof where treino = 'natacao'")
+
     profioga = select_data(
         "Select nome from cadastro_prof where treino = 'ioga'")
+
     profcross = select_data(
         "Select nome from cadastro_prof where treino = 'crossfit'")
+
     if treino == "musculacao":
+        for prof in profmus:
+            professor = prof["nome"]
         periodo = select_data(
             "Select horario from cadastro_treino where treino = 'musculacao'")
+        for hora in periodo:
+            horario = hora["horario"]
         message = (
-            f"{matricula} se matriculou em Musculação com o professor {profmus} nos dias segunda, quarta e sexta no período da {periodo}")
+            f"{matricula} se matriculou em Musculação com o professor {professor} nos dias segunda, quarta e sexta no período da {horario}")
         insert_data(f"""insert into marque_treino (matricula, treino, professor)
         VALUES ("{matricula}", "{treino}", "{profmus}")""")
     elif treino == "natacao":
+        for prof in profnat:
+            professor = prof["nome"]
         periodo = select_data(
             "Select horario from cadastro_treino where treino = 'natacao'")
+        for hora in periodo:
+            horario = hora["horario"]
         message = (
-            f"{matricula} se matriculou em Natação com o professor {profnat} nos dias terça, quinta e sábado no período {periodo}")
+            f"{matricula} se matriculou em Natação com o professor {professor} nos dias terça, quinta e sábado no período {horario}")
         insert_data(f"""insert into marque_treino (matricula, treino, professor)
-        VALUES ('{matricula}', '{treino}', '{profnat}')""")
+        VALUES ("{matricula}", "{treino}", "{profnat}")""")
     elif treino == "ioga":
+        for prof in profioga:
+            professor = prof["nome"]
         periodo = select_data(
             "Select horario from cadastro_treino where treino = 'ioga'")
+        for hora in periodo:
+            horario = hora["horario"]
         message = (
-            f"{matricula} se matriculou em Ioga com o professor {profioga} nos dias segunda, quarta e sexta no periodo da {periodo}")
+            f"{matricula} se matriculou em Ioga com o professor {professor} nos dias segunda, quarta e sexta no periodo da {horario}")
         insert_data(f"""insert into marque_treino (matricula, treino, professor)
-        VALUES ('{matricula}', '{treino}', '{profioga}')""")
+        VALUES ("{matricula}", "{treino}", "{profioga}")""")
     else:
+        for prof in profcross:
+            professor = prof["nome"]
         periodo = select_data(
             "Select horario from cadastro_treino where treino = 'crossfit'")
+        for hora in periodo:
+            horario = hora["horario"]
         message = (
-            f"{matricula} se matriculou em Crossfit com o professor {profcross} nos dias terça, quinta e sábado no periodo da {periodo}")
+            f"{matricula} se matriculou em Crossfit com o professor {professor} nos dias terça, quinta e sábado no periodo da {horario}")
         insert_data(f"""insert into marque_treino (matricula, treino, professor)
-        VALUES ('{matricula}', '{treino}', '{profcross}')""")
+        VALUES ("{matricula}", "{treino}", "{profcross}")""")
     return render_template('cadmatri.html', message=message)
 
 
