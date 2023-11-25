@@ -100,67 +100,58 @@ def cadastrotreino():
 
 @app.route("/cadastromatri", methods=['POST', 'GET'])
 def cadastromatri():
-    professor = ""
-    horario = ""
     matricula = request.form['matricula']
     treino = request.form['treino']
-    profmus = select_data(
-        "Select nome from cadastro_prof where treino = 'musculacao'")
-
-    profnat = select_data(
-        "Select nome from cadastro_prof where treino = 'natacao'")
-
-    profioga = select_data(
-        "Select nome from cadastro_prof where treino = 'ioga'")
-
-    profcross = select_data(
-        "Select nome from cadastro_prof where treino = 'crossfit'")
-
     if treino == "musculacao":
-        for prof in profmus:
-            professor = prof["nome"]
-        periodo = select_data(
-            "Select horario from cadastro_treino where treino = 'musculacao'")
-        for hora in periodo:
-            horario = hora["horario"]
+        profmus = selecionar_professor(treino="musculacao")
+        horario = selecionar_horario(treino="musculacao")
         message = (
-            f"{matricula} se matriculou em Musculação com o professor {professor} nos dias segunda, quarta e sexta no período da {horario}")
+            f"{matricula} se matriculou em Musculação com o professor {profmus} nos dias segunda, quarta e sexta no período da {horario}.")
         insert_data(f"""insert into marque_treino (matricula, treino, professor)
         VALUES ("{matricula}", "{treino}", "{profmus}")""")
     elif treino == "natacao":
-        for prof in profnat:
-            professor = prof["nome"]
-        periodo = select_data(
-            "Select horario from cadastro_treino where treino = 'natacao'")
-        for hora in periodo:
-            horario = hora["horario"]
+        profnat = selecionar_professor(treino="natacao")
+        horario = selecionar_horario(treino="natacao")
         message = (
-            f"{matricula} se matriculou em Natação com o professor {professor} nos dias terça, quinta e sábado no período {horario}")
+            f"{matricula} se matriculou em Natação com a professora {profnat} nos dias terça, quinta e sábado no período {horario}.")
         insert_data(f"""insert into marque_treino (matricula, treino, professor)
         VALUES ("{matricula}", "{treino}", "{profnat}")""")
     elif treino == "ioga":
-        for prof in profioga:
-            professor = prof["nome"]
-        periodo = select_data(
-            "Select horario from cadastro_treino where treino = 'ioga'")
-        for hora in periodo:
-            horario = hora["horario"]
+        profioga = selecionar_professor(treino="ioga")
+        horario = selecionar_horario(treino="ioga")
         message = (
-            f"{matricula} se matriculou em Ioga com o professor {professor} nos dias segunda, quarta e sexta no periodo da {horario}")
+            f"{matricula} se matriculou em Ioga com o professor {profioga} nos dias segunda, quarta e sexta no periodo da {horario}.")
         insert_data(f"""insert into marque_treino (matricula, treino, professor)
         VALUES ("{matricula}", "{treino}", "{profioga}")""")
     else:
-        for prof in profcross:
-            professor = prof["nome"]
-        periodo = select_data(
-            "Select horario from cadastro_treino where treino = 'crossfit'")
-        for hora in periodo:
-            horario = hora["horario"]
+        profcross = selecionar_professor(treino="crossfit")
+        horario = selecionar_horario(treino="crossfit")
         message = (
-            f"{matricula} se matriculou em Crossfit com o professor {professor} nos dias terça, quinta e sábado no periodo da {horario}")
+            f"{matricula} se matriculou em Crossfit com a professora {profcross} nos dias terça, quinta e sábado no periodo da {horario}.")
         insert_data(f"""insert into marque_treino (matricula, treino, professor)
         VALUES ("{matricula}", "{treino}", "{profcross}")""")
-    return render_template('cadmatri.html', message=message)
+    alunos = select_data("Select nome from cadastro_aluno")
+    alunos = [aluno[0] for aluno in alunos]
+    resultado_cadastro_treino = select_data(
+        "Select treino from cadastro_treino")
+    treinos = [treino[0] for treino in resultado_cadastro_treino]
+    return render_template('cadmatri.html', message=message, name=alunos, treinos=treinos)
+
+
+def selecionar_professor(treino):
+    results = select_data(
+        f"Select nome from cadastro_prof where treino = '{treino}'")
+    for result in results:
+        prof = result[0]
+    return prof
+
+
+def selecionar_horario(treino):
+    results = select_data(
+        f"Select horario from cadastro_treino where treino ='{treino}'")
+    for result in results:
+        hora = result[0]
+    return hora
 
 
 def select_data(query):

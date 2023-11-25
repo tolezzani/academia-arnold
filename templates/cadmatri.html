@@ -26,7 +26,7 @@
     </header>
     <section>
       <div>
-        <form action= "{{ url_for('cadastromatri') }}" method="POST">
+        <form action="{{ url_for('cadastromatri') }}" method="POST">
           Escolha sua matrícula:
           <select name="matricula" id="matricula">
             {% for n in name %}
