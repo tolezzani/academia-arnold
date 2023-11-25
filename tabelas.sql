@@ -24,3 +24,11 @@ dia_semana varchar(20) not null,
 horario varchar(10) not null,
 primary key (id)
 );
+
+create table marque_treino (
+id int not null auto_increment,
+matricula varchar (50) not null,
+treino varchar (40) not null,
+professor varchar (50) not null,
+primary key (id)
+);
